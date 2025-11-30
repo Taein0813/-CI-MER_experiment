@@ -622,7 +622,7 @@
           <label><input type="radio" name="major_status" value="음악 비전공자"> 음악 비전공자</label>
         </div>
 
-                <!-- CI 관련 프로필 -->
+        <!-- CI 관련 프로필 -->
         <div class="ci-section">
           <div class="consent-section-title">CI 관련 정보</div>
           <p class="ci-section-note">
@@ -634,18 +634,18 @@
             <div class="ci-ear-col">
               <div class="ci-ear-title">왼쪽 귀</div>
 
-              <!-- 0. 귀 상태 (2×2) -->
+              <!-- 귀 상태 (2×2) – 필수 -->
               <div class="consent-input-row">
                 <label>귀 상태 :</label>
                 <div class="ci-radio-grid">
-                  <label><input type="radio" name="ci_left_status" value="인공와우"> 인공와우</label>
+                  <label><input type="radio" name="ci_left_status" value="인공와우" required> 인공와우</label>
                   <label><input type="radio" name="ci_left_status" value="보청기"> 보청기</label>
                   <label><input type="radio" name="ci_left_status" value="전농"> 전농(보조기기X)</label>
                   <label><input type="radio" name="ci_left_status" value="정상청력"> 정상청력</label>
                 </div>
               </div>
 
-              <!-- 1. 브랜드 (2×2, 마지막 칸에 '기타: ____') -->
+              <!-- 브랜드 (2×2, 마지막 칸에 '기타: ____') – 필수 아님 -->
               <div class="consent-input-row">
                 <label>인공와우인 경우 브랜드 :</label>
                 <div class="ci-radio-grid">
@@ -661,20 +661,20 @@
                 </div>
               </div>
 
-              <!-- 2~4. 나이 / dB -->
+              <!-- 나이 / dB – 필수 -->
               <div class="consent-input-row">
                 <label>난청 시작 나이(만) :</label>
-                <input type="text" name="ci_left_onset_age" placeholder="예: 0" />
+                <input type="text" name="ci_left_onset_age" placeholder="예: 0" required />
               </div>
 
               <div class="consent-input-row">
                 <label>이식 시 나이(만) :</label>
-                <input type="text" name="ci_left_implant_age" placeholder="예: 1" />
+                <input type="text" name="ci_left_implant_age" placeholder="예: 1" required />
               </div>
 
               <div class="consent-input-row">
                 <label>현재 청력(dB) :</label>
-                <input type="text" name="ci_left_db" placeholder="예: 20" />
+                <input type="text" name="ci_left_db" placeholder="예: 20" required />
               </div>
             </div>
 
@@ -689,18 +689,18 @@
             <div class="ci-ear-col">
               <div class="ci-ear-title">오른쪽 귀</div>
 
-              <!-- 0. 귀 상태 (2×2) -->
+              <!-- 귀 상태 (2×2) – 필수 -->
               <div class="consent-input-row">
                 <label>귀 상태 :</label>
                 <div class="ci-radio-grid">
-                  <label><input type="radio" name="ci_right_status" value="인공와우"> 인공와우</label>
+                  <label><input type="radio" name="ci_right_status" value="인공와우" required> 인공와우</label>
                   <label><input type="radio" name="ci_right_status" value="보청기"> 보청기</label>
                   <label><input type="radio" name="ci_right_status" value="전농"> 전농(보조기기X)</label>
                   <label><input type="radio" name="ci_right_status" value="정상청력"> 정상청력</label>
                 </div>
               </div>
 
-              <!-- 1. 브랜드 (2×2) -->
+              <!-- 브랜드 (2×2) – 필수 아님 -->
               <div class="consent-input-row">
                 <label>인공와우인 경우 브랜드 :</label>
                 <div class="ci-radio-grid">
@@ -716,24 +716,86 @@
                 </div>
               </div>
 
-              <!-- 2~4. 나이 / dB -->
+              <!-- 나이 / dB – 필수 -->
               <div class="consent-input-row">
                 <label>난청 시작 나이(만) :</label>
-                <input type="text" name="ci_right_onset_age" placeholder="예: 5" />
+                <input type="text" name="ci_right_onset_age" placeholder="예: 5" required />
               </div>
 
               <div class="consent-input-row">
                 <label>이식 시 나이(만) :</label>
-                <input type="text" name="ci_right_implant_age" placeholder="예: 12" />
+                <input type="text" name="ci_right_implant_age" placeholder="예: 12" required />
               </div>
 
               <div class="consent-input-row">
                 <label>현재 청력(dB) :</label>
-                <input type="text" name="ci_right_db" placeholder="예: 20" />
+                <input type="text" name="ci_right_db" placeholder="예: 20" required />
               </div>
             </div>
           </div>
         </div>
+      `,
+      button_label: "실험 시작하기",
+      on_load: function () {
+        // 1) 브랜드 라디오버튼 토글 가능하게 만들기 (다시 클릭 시 해제)
+        function makeRadioToggleable(groupName) {
+          const radios = document.querySelectorAll('input[type="radio"][name="' + groupName + '"]');
+          radios.forEach(r => {
+            r.addEventListener('click', function () {
+              if (this.dataset.wasChecked === "true") {
+                this.checked = false;
+                this.dataset.wasChecked = "false";
+              } else {
+                radios.forEach(rb => rb.dataset.wasChecked = "false");
+                this.dataset.wasChecked = "true";
+              }
+            });
+          });
+        }
+        makeRadioToggleable("ci_left_brand");
+        makeRadioToggleable("ci_right_brand");
+
+        // 2) 버튼 아래 안내 문구 추가
+        const btn = document.querySelector('#jspsych-survey-html-form-next');
+        if (btn) {
+          btn.style.marginTop = "60px";
+          
+          const note = document.createElement('p');
+          note.className = 'consent-text';
+          note.style.marginTop = '12px';
+          note.style.fontWeight = '600';
+          note.innerHTML =
+            '* 중간에 나가시면 저장이 안됩니다. 한번에 끝까지 진행해 주세요!<br>' +
+            '* 조용한 곳에서 가장 편한 방법으로 들어주세요.<br>' +
+            '* 너무 오래 생각하지 마시고 직관적으로 평가해 주세요.';
+          btn.insertAdjacentElement('afterend', note);
+        }
+      },
+      on_finish: function (data) {
+        const resp = data.response || {};
+        jsPsych.data.addProperties({
+          bio_sex: resp.bio_sex || null,
+          age: resp.age || null,
+          time: resp.time || null,
+          major_status: resp.major_status || null,
+
+          ci_left_status: resp.ci_left_status || null,
+          ci_left_brand: resp.ci_left_brand || null,
+          ci_left_brand_other: resp.ci_left_brand_other || null,
+          ci_left_onset_age: resp.ci_left_onset_age || null,
+          ci_left_implant_age: resp.ci_left_implant_age || null,
+          ci_left_db: resp.ci_left_db || null,
+
+          ci_right_status: resp.ci_right_status || null,
+          ci_right_brand: resp.ci_right_brand || null,
+          ci_right_brand_other: resp.ci_right_brand_other || null,
+          ci_right_onset_age: resp.ci_right_onset_age || null,
+          ci_right_implant_age: resp.ci_right_implant_age || null,
+          ci_right_db: resp.ci_right_db || null,
+        });
+      },
+    };
+
 
       `,
       button_label: "실험 시작하기",
