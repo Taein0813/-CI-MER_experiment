@@ -128,7 +128,6 @@
       font-size: 12px;
     }
 
-    
     /* 가운데 눈금용 래퍼 */
     .slider-wrap {
       position: relative;
@@ -796,51 +795,6 @@
       },
     };
 
-
-      `,
-      button_label: "실험 시작하기",
-      on_load: function () {
-        // 버튼 아래에 안내 문구 추가
-        const btn = document.querySelector('#jspsych-survey-html-form-next');
-        if (btn) {
-          btn.style.marginTop = "60px";
-          
-          const note = document.createElement('p');
-          note.className = 'consent-text';
-          note.style.marginTop = '12px';
-          note.style.fontWeight = '600';
-          note.innerHTML =
-            '* 중간에 나가시면 저장이 안됩니다. 한번에 끝까지 진행해 주세요!<br>' +
-            '* 조용한 곳에서 가장 편한 방법으로 들어주세요.<br>' +
-            '* 너무 오래 생각하지 마시고 직관적으로 평가해 주세요.';
-          btn.insertAdjacentElement('afterend', note);
-        }
-      },
-      on_finish: function (data) {
-        const resp = data.response || {};
-        jsPsych.data.addProperties({
-          bio_sex: resp.bio_sex || null,
-          age: resp.age || null,
-          time: resp.time || null,
-          major_status: resp.major_status || null,
-
-          ci_left_status: resp.ci_left_status || null,
-          ci_left_brand: resp.ci_left_brand || null,
-          ci_left_brand_other: resp.ci_left_brand_other || null,
-          ci_left_onset_age: resp.ci_left_onset_age || null,
-          ci_left_implant_age: resp.ci_left_implant_age || null,
-          ci_left_db: resp.ci_left_db || null,
-
-          ci_right_status: resp.ci_right_status || null,
-          ci_right_brand: resp.ci_right_brand || null,
-          ci_right_brand_other: resp.ci_right_brand_other || null,
-          ci_right_onset_age: resp.ci_right_onset_age || null,
-          ci_right_implant_age: resp.ci_right_implant_age || null,
-          ci_right_db: resp.ci_right_db || null,
-        });
-      },
-    };
-
     // -----------------------------
     // 2. 자극 목록 준비
     // -----------------------------
@@ -1033,7 +987,7 @@
       `,
       html: `
         <div class="consent-section-title">
-          마지막으로, 어떤 방식으로 음악을 들으셨는지 체크해 주세요. <span style="color:red;">*</span>
+          어떤 방식으로 음악을 들으셨는지 체크해 주세요. <span style="color:red;">*</span>
         </div>
 
         <div class="consent-input-row">
