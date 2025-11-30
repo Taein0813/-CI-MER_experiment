@@ -99,6 +99,36 @@
       text-align: right;
     }
 
+    /* CI 라디오 2×2용 그리드 */
+    .ci-radio-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 16px;
+      row-gap: 4px;
+      margin-top: 4px;
+    }
+
+    .ci-radio-grid label {
+      display: flex;
+      align-items: center;
+      font-size: 13px;
+      gap: 4px;
+    }
+
+    /* 브랜드: 기타 + 텍스트 박스 같이 쓰기 */
+    .ci-brand-extra {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ci-brand-extra input[type="text"] {
+      flex: 1;
+      padding: 3px 4px;
+      font-size: 12px;
+    }
+
+    
     /* 가운데 눈금용 래퍼 */
     .slider-wrap {
       position: relative;
@@ -592,7 +622,7 @@
           <label><input type="radio" name="major_status" value="음악 비전공자"> 음악 비전공자</label>
         </div>
 
-        <!-- CI 관련 프로필 -->
+                <!-- CI 관련 프로필 -->
         <div class="ci-section">
           <div class="consent-section-title">CI 관련 프로필 (해당되는 경우)</div>
           <p class="ci-section-note">
@@ -604,38 +634,47 @@
             <div class="ci-ear-col">
               <div class="ci-ear-title">왼쪽 귀</div>
 
+              <!-- 0. 귀 상태 (2×2) -->
               <div class="consent-input-row">
-                <label>0. 귀 상태 :</label><br>
-                <label><input type="radio" name="ci_left_status" value="인공와우"> 인공와우</label><br>
-                <label><input type="radio" name="ci_left_status" value="보청기"> 보청기</label><br>
-                <label><input type="radio" name="ci_left_status" value="전농"> 전농(보조기기X)</label><br>
-                <label><input type="radio" name="ci_left_status" value="정상청력"> 정상청력</label>
+                <label>0. 귀 상태 :</label>
+                <div class="ci-radio-grid">
+                  <label><input type="radio" name="ci_left_status" value="인공와우"> 인공와우</label>
+                  <label><input type="radio" name="ci_left_status" value="보청기"> 보청기</label>
+                  <label><input type="radio" name="ci_left_status" value="전농"> 전농(보조기기X)</label>
+                  <label><input type="radio" name="ci_left_status" value="정상청력"> 정상청력</label>
+                </div>
               </div>
 
+              <!-- 1. 브랜드 (2×2, 마지막 칸에 '기타: ____') -->
               <div class="consent-input-row">
-                <label>1. 인공와우인 경우 브랜드 :</label><br>
-                <label><input type="radio" name="ci_left_brand" value="Cochlear"> Cochlear</label><br>
-                <label><input type="radio" name="ci_left_brand" value="MED-EL"> MED-EL</label><br>
-                <label><input type="radio" name="ci_left_brand" value="Advanced Bionics"> Advanced Bionics(AB)</label><br>
-                <label><input type="radio" name="ci_left_brand" value="기타"> 기타</label>
-              </div>
-              <div class="consent-input-row" style="margin-left:10px;">
-                <input type="text" name="ci_left_brand_other" placeholder="기타 브랜드 (직접 입력)">
+                <label>1. 인공와우인 경우 브랜드 :</label>
+                <div class="ci-radio-grid">
+                  <label><input type="radio" name="ci_left_brand" value="Cochlear"> Cochlear</label>
+                  <label><input type="radio" name="ci_left_brand" value="MED-EL"> MED-EL</label>
+                  <label><input type="radio" name="ci_left_brand" value="Advanced Bionics"> Advanced Bionics(AB)</label>
+                  <div class="ci-brand-extra">
+                    <label style="margin:0;">
+                      <input type="radio" name="ci_left_brand" value="기타"> 기타:
+                    </label>
+                    <input type="text" name="ci_left_brand_other" placeholder="브랜드 직접 입력">
+                  </div>
+                </div>
               </div>
 
+              <!-- 2~4. 나이 / dB -->
               <div class="consent-input-row">
-                <label>2. 난청 시작 시 나이 :</label>
-                <input type="text" name="ci_left_onset_age" placeholder="예: 20 (세)">
+                <label>2. 난청 시작 나이 :</label>
+                <input type="text" name="ci_left_onset_age" placeholder="예: 5 (만, 세)" />
               </div>
 
               <div class="consent-input-row">
                 <label>3. 이식 시 나이 :</label>
-                <input type="text" name="ci_left_implant_age" placeholder="예: 21 (세)">
+                <input type="text" name="ci_left_implant_age" placeholder="예: 12 (만, 세)" />
               </div>
 
               <div class="consent-input-row">
-                <label>4. 데시벨 :</label>
-                <input type="text" name="ci_left_db" placeholder="예: 20 (dB)">
+                <label>4. 현재 청력 :</label>
+                <input type="text" name="ci_left_db" placeholder="예: 90 (dB)" />
               </div>
             </div>
 
@@ -650,42 +689,52 @@
             <div class="ci-ear-col">
               <div class="ci-ear-title">오른쪽 귀</div>
 
+              <!-- 0. 귀 상태 (2×2) -->
               <div class="consent-input-row">
-                <label>0. 귀 상태 :</label><br>
-                <label><input type="radio" name="ci_right_status" value="인공와우"> 인공와우</label><br>
-                <label><input type="radio" name="ci_right_status" value="보청기"> 보청기</label><br>
-                <label><input type="radio" name="ci_right_status" value="전농"> 전농(보조기기X)</label><br>
-                <label><input type="radio" name="ci_right_status" value="정상청력"> 정상청력</label>
+                <label>0. 귀 상태 :</label>
+                <div class="ci-radio-grid">
+                  <label><input type="radio" name="ci_right_status" value="인공와우"> 인공와우</label>
+                  <label><input type="radio" name="ci_right_status" value="보청기"> 보청기</label>
+                  <label><input type="radio" name="ci_right_status" value="전농"> 전농(보조기기X)</label>
+                  <label><input type="radio" name="ci_right_status" value="정상청력"> 정상청력</label>
+                </div>
               </div>
 
+              <!-- 1. 브랜드 (2×2) -->
               <div class="consent-input-row">
-                <label>1. 인공와우인 경우 브랜드 :</label><br>
-                <label><input type="radio" name="ci_right_brand" value="Cochlear"> Cochlear</label><br>
-                <label><input type="radio" name="ci_right_brand" value="MED-EL"> MED-EL</label><br>
-                <label><input type="radio" name="ci_right_brand" value="Advanced Bionics"> Advanced Bionics(AB)</label><br>
-                <label><input type="radio" name="ci_right_brand" value="기타"> 기타</label>
-              </div>
-              <div class="consent-input-row" style="margin-left:10px;">
-                <input type="text" name="ci_right_brand_other" placeholder="기타 브랜드 (직접 입력)">
+                <label>1. 인공와우인 경우 브랜드 :</label>
+                <div class="ci-radio-grid">
+                  <label><input type="radio" name="ci_right_brand" value="Cochlear"> Cochlear</label>
+                  <label><input type="radio" name="ci_right_brand" value="MED-EL"> MED-EL</label>
+                  <label><input type="radio" name="ci_right_brand" value="Advanced Bionics"> Advanced Bionics(AB)</label>
+                  <div class="ci-brand-extra">
+                    <label style="margin:0;">
+                      <input type="radio" name="ci_right_brand" value="기타"> 기타:
+                    </label>
+                    <input type="text" name="ci_right_brand_other" placeholder="브랜드 직접 입력">
+                  </div>
+                </div>
               </div>
 
+              <!-- 2~4. 나이 / dB -->
               <div class="consent-input-row">
-                <label>2. 난청 시작 시 나이 :</label>
-                <input type="text" name="ci_right_onset_age" placeholder="예: 5 (세)">
+                <label>2. 난청 시작 나이 :</label>
+                <input type="text" name="ci_right_onset_age" placeholder="예: 5 (만, 세)" />
               </div>
 
               <div class="consent-input-row">
                 <label>3. 이식 시 나이 :</label>
-                <input type="text" name="ci_right_implant_age" placeholder="예: 12 (세)">
+                <input type="text" name="ci_right_implant_age" placeholder="예: 12 (만, 세)" />
               </div>
 
               <div class="consent-input-row">
-                <label>4. 데시벨 :</label>
-                <input type="text" name="ci_right_db" placeholder="예: 20 (dB)">
+                <label>4. 현재 청력 :</label>
+                <input type="text" name="ci_right_db" placeholder="예: 90 (dB)" />
               </div>
             </div>
           </div>
         </div>
+
       `,
       button_label: "실험 시작하기",
       on_load: function () {
