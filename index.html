@@ -182,6 +182,62 @@
       margin-bottom: 40px;
     }
 
+    /* CI 얼굴 + 귀 섹션 */
+    .ci-section {
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px dashed #ccc;
+    }
+
+    .ci-section-note {
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .ci-face-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin: 8px 0 14px;
+    }
+
+    .ci-ear-label {
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .ci-ear-graphic {
+      width: 22px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      background: #f8fafc;
+      margin: 4px auto 0;
+    }
+
+    .ci-face {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      position: relative;
+      background: #fdfdfd;
+    }
+
+    .ci-nose {
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 14px solid #555; /* 아래를 향한 작은 삼각형 (코) */
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
     /* 반응형 */
     @media (max-width: 900px) {
       .trial-layout {
@@ -201,6 +257,10 @@
         width: 100%;
         max-width: 100%;
       }
+
+      .ci-face-wrap {
+        gap: 16px;
+      }
     }
   </style>
 </head>
@@ -210,7 +270,7 @@
 
   <script>
     // -----------------------------
-    // 0. Google Apps Script 웹앱 URL
+    // 0. Google Apps Script 웹앱 URL (새 URL)
     // -----------------------------
     const SUBMIT_URL =
       "https://script.google.com/macros/s/AKfycbz_wQaZ6kH0VTSZ4l3n0LXK9TESBKYkjFHmEBVKpljiExbYTniEA16t0r4KhaBqwcRDyA/exec";
@@ -504,7 +564,7 @@
     };
 
     // -----------------------------
-    // 1-3. 기초 정보: 생물학적 성별 / 만 나이 / 음악 전공 여부
+    // 1-3. 기초 정보 + CI profile
     // -----------------------------
     const demographics = {
       type: jsPsychSurveyHtmlForm,
@@ -515,6 +575,7 @@
         </p>
       `,
       html: `
+        <!-- 기본 demographic -->
         <div class="consent-input-row">
           <label>생물학적 성별 :</label>
           <label><input type="radio" name="bio_sex" value="남성" required> 남성</label>
@@ -535,6 +596,64 @@
           <label>음악 전공 여부 :</label>
           <label><input type="radio" name="major_status" value="음악 전공자" required> 음악 전공자</label>
           <label><input type="radio" name="major_status" value="음악 비전공자"> 음악 비전공자</label>
+        </div>
+
+        <!-- CI 관련 프로필 -->
+        <div class="ci-section">
+          <div class="consent-section-title">CI 관련 프로필 (해당되는 경우)</div>
+          <p class="ci-section-note">
+            * 정확히 모르시겠으면 대략적으로 입력해주셔도 됩니다.
+          </p>
+
+          <!-- 얼굴 + 귀 모양 -->
+          <div class="ci-face-wrap">
+            <div class="ci-ear-label">
+              왼쪽 귀<br>
+              <div class="ci-ear-graphic"></div>
+            </div>
+            <div class="ci-face">
+              <div class="ci-nose"></div>
+            </div>
+            <div class="ci-ear-label">
+              오른쪽 귀<br>
+              <div class="ci-ear-graphic"></div>
+            </div>
+          </div>
+
+          <!-- CI 질문들 (전체 프로필용) -->
+          <div class="consent-input-row">
+            <label>0. 귀 상태 (선택) :</label>
+            <label><input type="radio" name="ci_ear_status" value="인공와우"> 인공와우</label>
+            <label><input type="radio" name="ci_ear_status" value="보청기"> 보청기</label>
+            <label><input type="radio" name="ci_ear_status" value="전농"> 전농(보조기기X)</label>
+            <label><input type="radio" name="ci_ear_status" value="정상청력"> 정상청력</label>
+          </div>
+
+          <div class="consent-input-row">
+            <label>1. 인공와우인 경우 브랜드 (선택) :</label>
+            <label><input type="radio" name="ci_brand" value="Cochlear"> Cochlear</label>
+            <label><input type="radio" name="ci_brand" value="MED-EL"> MED-EL</label>
+            <label><input type="radio" name="ci_brand" value="Advanced Bionics"> Advanced Bionics(AB)</label>
+            <label><input type="radio" name="ci_brand" value="기타"> 기타</label>
+          </div>
+          <div class="consent-input-row" style="margin-left:190px;">
+            <input type="text" name="ci_brand_other" placeholder="기타 브랜드 (직접 입력)">
+          </div>
+
+          <div class="consent-input-row">
+            <label>2. 난청 시작 시 본인 나이 :</label>
+            <input type="text" name="ci_onset_age" placeholder="예: 5 (세)">
+          </div>
+
+          <div class="consent-input-row">
+            <label>3. 이식 시 본인 나이 :</label>
+            <input type="text" name="ci_implant_age" placeholder="예: 12 (세)">
+          </div>
+
+          <div class="consent-input-row">
+            <label>4. 데시벨 :</label>
+            <input type="text" name="ci_db" placeholder="예: 90 (dB)">
+          </div>
         </div>
       `,
       button_label: "실험 시작하기",
@@ -562,6 +681,13 @@
           age: resp.age || null,
           time: resp.time || null,
           major_status: resp.major_status || null,
+
+          ci_ear_status: resp.ci_ear_status || null,
+          ci_brand: resp.ci_brand || null,
+          ci_brand_other: resp.ci_brand_other || null,
+          ci_onset_age: resp.ci_onset_age || null,
+          ci_implant_age: resp.ci_implant_age || null,
+          ci_db: resp.ci_db || null,
         });
       },
     };
