@@ -302,26 +302,39 @@
     // -----------------------------
     // 1. jsPsych 초기화
     // -----------------------------
-    const jsPsych = initJsPsych({
-      display_element: "jspsych-target",
-      on_finish: function () {
-        const csv = jsPsych.data.get().csv();
+const jsPsych = initJsPsych({
+  display_element: "jspsych-target",
+  on_finish: function () {
 
-        fetch(SUBMIT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            subject_id: subject_id,
-            csv: csv,
-          }),
-        });
-      },
+    // ✅ 1) 전체 데이터 CSV
+    const csv = jsPsych.data.get().csv();
+
+    // ✅ 2) 제출 시각 생성 (한국 시간 + ISO)
+    const now = new Date();
+    const submitted_at = now.toLocaleString("ko-KR", {
+      timeZone: "Asia/Seoul",
+    });  
+    const submitted_iso = now.toISOString();
+
+    // ✅ 3) 시간 정보까지 같이 전송
+    fetch(SUBMIT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        subject_id: subject_id,
+        csv: csv,
+        submitted_at: submitted_at,     // ✅ 추가
+        submitted_iso: submitted_iso,   // ✅ 추가
+      }),
     });
+  },
+});
 
-    // 참가자 ID 생성 후 전체 데이터에 붙이기
-    const subject_id = jsPsych.randomization.randomID(10);
-    jsPsych.data.addProperties({ subject_id: subject_id });
+// ✅ 참가자 ID 생성 후 전체 데이터에 붙이기
+const subject_id = jsPsych.randomization.randomID(10);
+jsPsych.data.addProperties({ subject_id: subject_id });
+
 
     // -----------------------------
     // 1-0. 시작 안내 창
